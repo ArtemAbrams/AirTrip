@@ -1,0 +1,57 @@
+package com.example.airtrip.configuration;
+
+import com.example.airtrip.services.implementation.JwtServiceIml;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.oauth2.client.ClientCredentialsOAuth2AuthorizedClientProvider;
+import org.springframework.security.oauth2.client.authentication.OAuth2LoginAuthenticationToken;
+import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenResponse;
+import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationResponse;
+import org.springframework.security.oauth2.core.user.OAuth2UserAuthority;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.io.IOException;
+
+@Component
+//@RequiredArgsConstructor
+public class SecurityFilter extends OncePerRequestFilter {
+    @Autowired
+    private  JwtServiceIml jwtService;
+    @Autowired
+    private  UserDetailsService userDetailsService;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
+            var header = request.getHeader("Authorization");
+            if (header != null && header.startsWith("Bearer ")) {
+                var token = header.substring(7);
+                var username = jwtService.extractUsername(token);
+                if(username!=null && SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()==null) {
+                    var user = userDetailsService.loadUserByUsername(username);
+                    if (jwtService.isTokenValid(token, user)) {
+                        var userToken = new UsernamePasswordAuthenticationToken(
+                                user,
+                                null,
+                                user.getAuthorities()
+                        );
+                        userToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        SecurityContextHolder.getContext().setAuthentication(userToken);
+                    }
+                }
+            }
+            filterChain.doFilter(request, response);
+    }
+}
