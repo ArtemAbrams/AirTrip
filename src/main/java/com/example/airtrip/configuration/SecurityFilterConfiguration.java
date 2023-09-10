@@ -1,7 +1,6 @@
 package com.example.airtrip.configuration;
 
 
-import com.example.airtrip.security.CookieOAuth2AuthorizationRequestRepository;
 import com.example.airtrip.security.RestAuthenticationEntryPoint;
 import com.example.airtrip.security.oauth2.CustomOAuth2UserService;
 import com.example.airtrip.security.oauth2.OAuth2AuthenticationFailureHandler;
@@ -9,14 +8,12 @@ import com.example.airtrip.security.oauth2.OAuth2AuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -31,7 +28,6 @@ public class SecurityFilterConfiguration {
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
     private final CustomOAuth2UserService customOAuth2UserService;
-    private final CookieOAuth2AuthorizationRequestRepository cookieOAuth2AuthorizationRequestRepository;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -47,8 +43,7 @@ public class SecurityFilterConfiguration {
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .oauth2Login(e -> e.authorizationEndpoint(f -> f
-                        .baseUri("/oauth2/authorize")
-                                .authorizationRequestRepository(cookieOAuth2AuthorizationRequestRepository))
+                        .baseUri("/oauth2/authorize"))
                         .redirectionEndpoint(f -> f.baseUri("/oauth2/callback/*"))
                         .userInfoEndpoint(f -> f.userService(customOAuth2UserService))
                         .successHandler(oAuth2AuthenticationSuccessHandler)

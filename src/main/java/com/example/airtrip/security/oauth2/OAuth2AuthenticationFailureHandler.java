@@ -1,9 +1,7 @@
 package com.example.airtrip.security.oauth2;
 
-import com.example.airtrip.security.CookieOAuth2AuthorizationRequestRepository;
-import com.example.airtrip.utils.CookieUtils;
+
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -18,14 +16,12 @@ import java.io.IOException;
 @Component
 @Slf4j
 public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
+    private final static String redirectUrl = "http://localhost:3000/oauth2/redirect";
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
 
-        String targetUrl = CookieUtils.getCookie(request, CookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME)
-                .map(Cookie::getValue)
-                .orElse(("/"));
 
-        var url = UriComponentsBuilder.fromUriString(targetUrl)
+        var url = UriComponentsBuilder.fromUriString(redirectUrl)
                 .queryParam("error", exception.getLocalizedMessage())
                 .build()
                 .toUriString();
