@@ -1,11 +1,11 @@
 package com.example.airtrip.controller.mvccontroller;
 
-import com.example.airtrip.domain.entity.entityformvc.ConflictCountry;
+import com.example.airtrip.domain.dto.dtoformvc.BarProductDTO;
+import com.example.airtrip.domain.entity.entityformvc.OrderM;
 import com.example.airtrip.domain.entity.entityformvc.Product;
-import com.example.airtrip.domain.enums.TypeOfConflict;
 import com.example.airtrip.domain.enums.TypeOfWeapon;
-import com.example.airtrip.domain.mapper.mvcmapper.ConflictCountryMapper;
 import com.example.airtrip.domain.mapper.mvcmapper.ProductMapper;
+import com.example.airtrip.repository.OrderRepository;
 import com.example.airtrip.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,12 +18,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/product")
 public class ProductController {
     private final ProductRepository productRepository;
+    private final OrderRepository orderRepository;
+
     @GetMapping("/findAll")
     public String getAll(ModelMap model){
         var products = productRepository.findAll()
@@ -31,6 +35,7 @@ public class ProductController {
                 .map(ProductMapper::entityToDTO)
                 .toList();
         model.addAttribute("listProducts", products);
+        model.addAttribute("ratingProducts", findAll());
         return "productIndex";
     }
     @PostMapping("/deleteProduct")
@@ -81,5 +86,31 @@ public class ProductController {
             product.setImage(multipartFile.getBytes());
         }
         return "redirect:/product/findAll";
+    }
+    private List<BarProductDTO> findAll(){
+        var products = productRepository.findAll()
+                .stream()
+                .map(ProductMapper::entityToDTO)
+                .toList();
+        var list = new ArrayList<BarProductDTO>();
+        var orders = orderRepository.findAll()
+                .stream()
+                .map(OrderM::getProducts)
+                .map(ProductMapper::entityListToDTOList)
+                .toList();
+        for(var product : products){
+            long count = 0;
+            for(var order : orders)
+            {
+                count += order.stream()
+                        .filter(e -> e.equals(product))
+                        .count();
+            }
+            list.add(BarProductDTO.builder()
+                    .name(product.getName())
+                    .number(count)
+                    .build());
+        }
+        return list;
     }
 }

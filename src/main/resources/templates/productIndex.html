@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>List of Product</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -25,11 +26,14 @@
           <a class="nav-link" href="/conflict/country/getAll">Country</a>
         </li>
       </ul>
-    0
+  </div>
   </div>
 </nav>
 <div class="container mt-4">
   <h1 class="mb-4">List of Product</h1>
+  <div>
+    <canvas id="myChart"></canvas>
+  </div>
   <div id="navbarContainer"></div>
   <a class="btn btn-primary mb-2" href="/product/create">Create</a>
   <table class="table table-striped">
@@ -64,4 +68,40 @@
   </table>
 </div>
 </body>
+<script th:inline="javascript">
+  const ctx = document.getElementById('myChart');
+  const listProducts = /*[[${ratingProducts}]]*/ [];
+  const names = listProducts.map(function (product) {
+    return product.name;
+  })
+  const counts = listProducts.map(function (product) {
+    return product.number;
+  });
+  names.forEach(function(name) {
+    console.log('Name:', name);
+  });
+  counts.forEach(function(name) {
+    console.log('Name:', name);
+  });
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: names,
+      datasets: [{
+        label: 'Popular product in order',
+        data: counts,
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgb(75, 192, 192)',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
 </html>
