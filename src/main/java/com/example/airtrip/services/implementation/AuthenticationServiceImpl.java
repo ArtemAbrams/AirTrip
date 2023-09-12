@@ -1,15 +1,14 @@
 package com.example.airtrip.services.implementation;
 
-import com.example.airtrip.domain.data.LoginData;
-import com.example.airtrip.domain.data.RegistrationData;
-import com.example.airtrip.domain.dto.TokenResponse;
-import com.example.airtrip.domain.entity.User;
+import com.example.airtrip.domain.data.dataforrestapi.LoginData;
+import com.example.airtrip.domain.data.dataforrestapi.RegistrationData;
+import com.example.airtrip.domain.dto.dtoforrestapi.TokenResponse;
+import com.example.airtrip.domain.entity.entityforrestspi.User;
 import com.example.airtrip.domain.enums.AuthProvider;
 import com.example.airtrip.repository.RoleRepository;
 import com.example.airtrip.repository.UserRepository;
 import com.example.airtrip.services.AuthenticationService;
 import lombok.RequiredArgsConstructor;
-import org.jvnet.hk2.annotations.Service;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -1,8 +1,8 @@
 package com.example.airtrip.security.oauth2;
 
-import com.example.airtrip.domain.entity.User;
+import com.example.airtrip.domain.entity.entityforrestspi.User;
 import com.example.airtrip.domain.enums.AuthProvider;
-import com.example.airtrip.domain.mapper.UserMapper;
+import com.example.airtrip.domain.mapper.restapimapper.UserMapper;
 import com.example.airtrip.exception.OAuth2AuthenticationProcessingException;
 import com.example.airtrip.repository.RoleRepository;
 import com.example.airtrip.repository.UserRepository;

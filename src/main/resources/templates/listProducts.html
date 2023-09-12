@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>List of Conflict Countries</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    Artemka
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/product/findAll">Product</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/order/getAll">Order</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/conflict/country/getAll">Country</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container mt-4">
+  <h1 class="mb-4">List of Conflict Countries</h1>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Flag</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="product : ${listProducts}">
+      <td th:text="${product.name}"></td>
+      <td th:text="${product.typeOfWeapon}"></td>
+      <td>
+        <img th:src="'data:image/jpeg;base64,' + ${product.generateBase64Image()}"
+             width="100" height="50" alt="Flag" />
+      </td>
+      <td>
+        <form th:action="@{/order/submitAddProduct}" th:method="post">
+          <input type="hidden" name="productId" th:value="${product.id}" />
+          <input type="hidden" name="orderId" th:value="${orderId}" />
+          <button class="btn btn-success btn-sm" type="submit">Add</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <form th:action="@{/order/addProduct}" th:method="get">
+    <input type="hidden" name="id" th:value="${orderId}" />
+    <button class="btn btn-info btn-sm" type="submit">Cancel</button>
+  </form>
+</div>
+</body>
+</html>

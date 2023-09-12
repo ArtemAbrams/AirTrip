@@ -1,8 +1,8 @@
 package com.example.airtrip.services.implementation;
 
-import com.example.airtrip.domain.data.AirTripData;
-import com.example.airtrip.domain.dto.AirTripDTO;
-import com.example.airtrip.domain.mapper.AirTripMapper;
+import com.example.airtrip.domain.data.dataforrestapi.AirTripData;
+import com.example.airtrip.domain.dto.dtoforrestapi.AirTripDTO;
+import com.example.airtrip.domain.mapper.restapimapper.AirTripMapper;
 import com.example.airtrip.exception.AirTripNotFoundException;
 import com.example.airtrip.exception.CountryNotFoundException;
 import com.example.airtrip.exception.PlaneNotFoundException;

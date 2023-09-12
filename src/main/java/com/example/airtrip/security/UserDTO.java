@@ -1,6 +1,5 @@
 package com.example.airtrip.security;
 
-import com.example.airtrip.domain.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

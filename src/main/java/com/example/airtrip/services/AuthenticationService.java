@@ -1,9 +1,8 @@
 package com.example.airtrip.services;
 
-import com.example.airtrip.domain.data.LoginData;
-import com.example.airtrip.domain.data.RegistrationData;
-import com.example.airtrip.domain.dto.TokenResponse;
-import org.springframework.stereotype.Service;
+import com.example.airtrip.domain.data.dataforrestapi.LoginData;
+import com.example.airtrip.domain.data.dataforrestapi.RegistrationData;
+import com.example.airtrip.domain.dto.dtoforrestapi.TokenResponse;
 
 
 public interface AuthenticationService {

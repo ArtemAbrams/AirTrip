@@ -2,10 +2,10 @@ package com.example.airtrip.services.implementation;
 
 
 import com.example.airtrip.domain.credential.TelegramCredentials;
-import com.example.airtrip.domain.dto.TelegramTripDto;
-import com.example.airtrip.domain.entity.TelegramUser;
-import com.example.airtrip.domain.mapper.CountryMapper;
-import com.example.airtrip.domain.mapper.PlaneMapper;
+import com.example.airtrip.domain.dto.dtoforrestapi.TelegramTripDto;
+import com.example.airtrip.domain.entity.entityforrestspi.TelegramUser;
+import com.example.airtrip.domain.mapper.restapimapper.CountryMapper;
+import com.example.airtrip.domain.mapper.restapimapper.PlaneMapper;
 import com.example.airtrip.repository.AirTripRepository;
 import com.example.airtrip.repository.TelegramUserRepository;
 import com.example.airtrip.services.MediaService;
@@ -15,10 +15,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jvnet.hk2.annotations.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
-import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChat;
 import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.*;

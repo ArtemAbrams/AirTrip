@@ -1,6 +1,6 @@
 package com.example.airtrip.services.implementation;
 
-import com.example.airtrip.domain.dto.TelegramTripDto;
+import com.example.airtrip.domain.dto.dtoforrestapi.TelegramTripDto;
 import com.example.airtrip.services.MediaService;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.InputFile;

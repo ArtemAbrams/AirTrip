@@ -1,7 +1,6 @@
 package com.example.airtrip.services;
 
-import com.example.airtrip.domain.dto.AirTripDTO;
-import com.example.airtrip.domain.dto.TelegramTripDto;
+import com.example.airtrip.domain.dto.dtoforrestapi.TelegramTripDto;
 import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
 
 import java.util.List;

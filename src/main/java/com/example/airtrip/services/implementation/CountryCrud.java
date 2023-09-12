@@ -1,8 +1,8 @@
 package com.example.airtrip.services.implementation;
 
-import com.example.airtrip.domain.data.CountryData;
-import com.example.airtrip.domain.dto.CountryDTO;
-import com.example.airtrip.domain.mapper.CountryMapper;
+import com.example.airtrip.domain.data.dataforrestapi.CountryData;
+import com.example.airtrip.domain.dto.dtoforrestapi.CountryDTO;
+import com.example.airtrip.domain.mapper.restapimapper.CountryMapper;
 import com.example.airtrip.exception.CountryNotFoundException;
 import com.example.airtrip.exception.HasTripToCountryException;
 import com.example.airtrip.repository.CountryRepository;
@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 
 @Service
