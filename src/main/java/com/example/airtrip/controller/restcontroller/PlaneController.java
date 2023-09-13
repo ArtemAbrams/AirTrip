@@ -2,9 +2,11 @@ package com.example.airtrip.controller.restcontroller;
 
 import com.example.airtrip.domain.data.dataforrestapi.PlaneData;
 import com.example.airtrip.domain.dto.dtoforrestapi.PlaneDTO;
+import com.example.airtrip.domain.dto.dtoforrestapi.ResponseDTO;
 import com.example.airtrip.services.implementation.PlaneCrud;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,51 +22,80 @@ import java.util.List;
 public class PlaneController {
     private final PlaneCrud planeCrud;
     @PostMapping("/create")
-    public ResponseEntity<String> createPlane(@RequestPart("data") PlaneData planeData,
+    public ResponseDTO<?> createPlane(@RequestPart("data") PlaneData planeData,
                                                 @RequestPart("file") MultipartFile file){
         try {
-            planeCrud.create(planeData, file);
-            return ResponseEntity.ok()
-                    .body("OK");
+            return ResponseDTO.data( planeCrud.create(planeData, file),
+                    HttpStatus.OK);
         }
         catch (Exception exception){
             log.error(exception.getMessage());
-            return ResponseEntity.badRequest()
-                    .body(exception.getMessage());
+            return ResponseDTO.error(exception.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @PutMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> createPlane(@RequestPart("data") PlaneData planeData,
+    public ResponseDTO<?> createPlane(@RequestPart("data") PlaneData planeData,
                                               @RequestPart("file") MultipartFile file,
                                               @RequestPart Long id) throws IOException {
             try {
-                planeCrud.update(planeData, file, id);
-                return ResponseEntity.ok()
-                        .body("OK");
+                return ResponseDTO.data(planeCrud.update(planeData, file, id),
+                        HttpStatus.OK);
             }
             catch (Exception exception){
                 log.error(exception.getMessage());
-                return ResponseEntity.badRequest()
-                        .body(exception.getMessage());
+                return ResponseDTO.error(exception.getMessage(),
+                        HttpStatus.INTERNAL_SERVER_ERROR);
             }
     }
     @GetMapping("/getAll")
-    public ResponseEntity<List<PlaneDTO>> findAll(){
-        return ResponseEntity.ok()
-                .body(planeCrud.findAll());
+    public ResponseDTO<?> findAll(){
+        try{
+            return ResponseDTO.data(planeCrud.findAll(),
+                    HttpStatus.OK);
+        }
+        catch (Exception exception){
+            log.error(exception.getMessage());
+            return ResponseDTO.error(exception.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
     @DeleteMapping("/delete")
-    public ResponseEntity<String> delete(@RequestParam Long id){
+    public ResponseDTO<?> delete(@RequestParam Long id){
         try {
             planeCrud.delete(id);
-            return ResponseEntity.ok()
-                    .body("OK");
+            return ResponseDTO.success();
 
         }
         catch (Exception exception){
             log.error(exception.getMessage());
-            return ResponseEntity.badRequest()
-                    .body(exception.getMessage());
+            return ResponseDTO.error(exception.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping ("/getPlaneById")
+    public ResponseDTO<?> getById(@RequestParam Long id){
+        try {
+            return ResponseDTO.data(planeCrud.getById(id),
+                    HttpStatus.OK);
+        }
+        catch (Exception exception){
+            log.error(exception.getMessage());
+            return ResponseDTO.error(exception.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("/pageFind")
+    public ResponseDTO<?> getAll(@RequestParam Long page,
+                                 @RequestParam Long size){
+        try {
+            return ResponseDTO.data(planeCrud.findAll(page, size),
+                    HttpStatus.OK);
+        }
+        catch (Exception exception) {
+            log.error(exception.getMessage());
+            return ResponseDTO.error(exception.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

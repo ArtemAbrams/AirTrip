@@ -2,12 +2,14 @@ package com.example.airtrip.controller.restcontroller;
 
 import com.example.airtrip.domain.data.dataforrestapi.CountryData;
 import com.example.airtrip.domain.dto.dtoforrestapi.CountryDTO;
+import com.example.airtrip.domain.dto.dtoforrestapi.ResponseDTO;
 import com.example.airtrip.domain.mapper.restapimapper.CountryMapper;
 import com.example.airtrip.exception.CountryNotFoundException;
 import com.example.airtrip.repository.CountryRepository;
 import com.example.airtrip.services.implementation.CountryCrud;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,68 +26,83 @@ public class CountryController {
     private final CountryCrud countryCrud;
     private final CountryRepository countryRepository;
     @PostMapping("/create")
-    public ResponseEntity<String> createCountry(@RequestPart("data") CountryData countryData,
-                                               @RequestPart("file") MultipartFile file){
+    public ResponseDTO<?> createCountry(@RequestPart("data") CountryData countryData,
+                                     @RequestPart("file") MultipartFile file){
         try {
-            countryCrud.create(countryData, file);
-            return ResponseEntity.ok()
-                    .body("OK");
+            return ResponseDTO.data(countryCrud.create(countryData, file),
+                    HttpStatus.OK);
 
         }
         catch (Exception exception){
             log.error(exception.getMessage());
-            return ResponseEntity.badRequest()
-                    .body(exception.getMessage());
+            return ResponseDTO.error(exception.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @PutMapping(value = "/update", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<String> updateCountry(@RequestPart("data") CountryData countryData,
+    public ResponseDTO<?> updateCountry(@RequestPart("data") CountryData countryData,
                                                 @RequestPart("file") MultipartFile file,
                                                 @RequestPart("id") Long id){
         try {
-            countryCrud.update(countryData, file, id);
-            return ResponseEntity.ok()
-                    .body("OK");
+            return ResponseDTO.data(countryCrud.update(countryData, file, id),
+                    HttpStatus.OK);
 
         }
         catch (Exception exception){
             log.error(exception.getMessage());
-            return ResponseEntity.badRequest()
-                    .body(exception.getMessage());
+            return ResponseDTO.error(exception.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
     @GetMapping("/getAll")
-    public ResponseEntity<List<CountryDTO>> findAll(){
-        return ResponseEntity.ok()
-                .body(countryCrud.findAll());
+    public ResponseDTO<?> findAll(){
+        try{
+            return ResponseDTO.data(countryCrud.findAll(),
+                    HttpStatus.OK);
+        }
+        catch (Exception exception){
+            log.error(exception.getMessage());
+            return ResponseDTO.error(exception.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
     @DeleteMapping("/delete")
-    public ResponseEntity<String> delete(@RequestParam Long id){
+    public ResponseDTO<?> delete(@RequestParam Long id){
         try {
             countryCrud.delete(id);
-            return ResponseEntity.ok()
-                    .body("OK");
-
+            return ResponseDTO.success();
         }
         catch (Exception exception){
             log.error(exception.getMessage());
-            return ResponseEntity.badRequest()
-                    .body(exception.getMessage());
+            return ResponseDTO.error(exception.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @GetMapping ("/getCountry")
-    public ResponseEntity<?> getById(@RequestParam Long id){
+    @GetMapping ("/getCountryById")
+    public ResponseDTO<?> getById(@RequestParam Long id){
         try {
-            var country = countryRepository.findById(id)
-                            .orElseThrow(() -> new CountryNotFoundException("Country with " + id + " was not found "));
-            return ResponseEntity.ok()
-                    .body(CountryMapper.entityToDto(country));
+            return ResponseDTO.data(countryCrud.getById(id),
+                    HttpStatus.OK);
         }
         catch (Exception exception){
             log.error(exception.getMessage());
-            return ResponseEntity.badRequest()
-                    .body(exception.getMessage());
+            return ResponseDTO.error(exception.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("/pageFind")
+    public ResponseDTO<?> getAll(@RequestParam Long page,
+                                 @RequestParam Long size){
+        try {
+            return ResponseDTO.data(countryCrud.findAll(page, size),
+                    HttpStatus.OK);
+        }
+        catch (Exception exception) {
+            log.error(exception.getMessage());
+            return ResponseDTO.error(exception.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
