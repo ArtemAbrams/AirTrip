@@ -1,10 +1,6 @@
 package com.example.airtrip.controller.restcontroller;
 
 import com.example.airtrip.domain.data.dataforrestapi.CountryData;
-import com.example.airtrip.domain.dto.dtoforrestapi.CountryDTO;
-import com.example.airtrip.domain.dto.dtoforrestapi.ResponseDTO;
-import com.example.airtrip.domain.mapper.restapimapper.CountryMapper;
-import com.example.airtrip.exception.CountryNotFoundException;
 import com.example.airtrip.repository.CountryRepository;
 import com.example.airtrip.services.implementation.CountryCrud;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 
 @RestController

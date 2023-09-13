@@ -1,8 +1,6 @@
 package com.example.airtrip.controller.restcontroller;
 
 import com.example.airtrip.domain.data.dataforrestapi.PlaneData;
-import com.example.airtrip.domain.dto.dtoforrestapi.PlaneDTO;
-import com.example.airtrip.domain.dto.dtoforrestapi.ResponseDTO;
 import com.example.airtrip.services.implementation.PlaneCrud;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
