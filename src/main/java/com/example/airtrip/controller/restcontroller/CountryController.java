@@ -26,83 +26,94 @@ public class CountryController {
     private final CountryCrud countryCrud;
     private final CountryRepository countryRepository;
     @PostMapping("/create")
-    public ResponseDTO<?> createCountry(@RequestPart("data") CountryData countryData,
+    public ResponseEntity<?> createCountry(@RequestPart("data") CountryData countryData,
                                      @RequestPart("file") MultipartFile file){
         try {
-            return ResponseDTO.data(countryCrud.create(countryData, file),
-                    HttpStatus.OK);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(countryCrud.create(countryData, file));
 
         }
         catch (Exception exception){
             log.error(exception.getMessage());
-            return ResponseDTO.error(exception.getMessage(),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(exception.getMessage());
         }
     }
     @PutMapping(value = "/update", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseDTO<?> updateCountry(@RequestPart("data") CountryData countryData,
+    public ResponseEntity<?> updateCountry(@RequestPart("data") CountryData countryData,
                                                 @RequestPart("file") MultipartFile file,
                                                 @RequestPart("id") Long id){
         try {
-            return ResponseDTO.data(countryCrud.update(countryData, file, id),
-                    HttpStatus.OK);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(countryCrud.update(countryData, file, id));
 
         }
         catch (Exception exception){
             log.error(exception.getMessage());
-            return ResponseDTO.error(exception.getMessage(),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(exception.getMessage());
         }
 
     }
     @GetMapping("/getAll")
-    public ResponseDTO<?> findAll(){
+    public ResponseEntity<?> findAll(){
         try{
-            return ResponseDTO.data(countryCrud.findAll(),
-                    HttpStatus.OK);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(countryCrud.findAll());
         }
         catch (Exception exception){
             log.error(exception.getMessage());
-            return ResponseDTO.error(exception.getMessage(),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(exception.getMessage());
         }
 
     }
     @DeleteMapping("/delete")
-    public ResponseDTO<?> delete(@RequestParam Long id){
+    public ResponseEntity<?> delete(@RequestParam Long id){
         try {
             countryCrud.delete(id);
-            return ResponseDTO.success();
+            return ResponseEntity.ok(HttpStatus.OK);
         }
         catch (Exception exception){
             log.error(exception.getMessage());
-            return ResponseDTO.error(exception.getMessage(),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(exception.getMessage());
         }
     }
     @GetMapping ("/getCountryById")
-    public ResponseDTO<?> getById(@RequestParam Long id){
+    public ResponseEntity<?> getById(@RequestParam Long id){
         try {
-            return ResponseDTO.data(countryCrud.getById(id),
-                    HttpStatus.OK);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(countryCrud.getById(id));
         }
         catch (Exception exception){
             log.error(exception.getMessage());
-            return ResponseDTO.error(exception.getMessage(),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(exception.getMessage());
         }
     }
     @GetMapping("/pageFind")
-    public ResponseDTO<?> getAll(@RequestParam Long page,
+    public ResponseEntity<?> getAll(@RequestParam Long page,
                                  @RequestParam Long size){
         try {
-            return ResponseDTO.data(countryCrud.findAll(page, size),
-                    HttpStatus.OK);
+             return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(countryCrud.findAll(page, size));
         }
         catch (Exception exception) {
             log.error(exception.getMessage());
-            return ResponseDTO.error(exception.getMessage(),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(exception.getMessage());
         }
     }
 }

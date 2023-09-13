@@ -20,81 +20,94 @@ import java.util.List;
 public class AirTripController {
     private final AirTripCrud airTripCrud;
     @PostMapping("/create")
-    public ResponseDTO<?> createCountry(@RequestPart("data") AirTripData data,
+    public ResponseEntity<?> createCountry(@RequestPart("data") AirTripData data,
                                              @RequestPart("file") MultipartFile file){
         try {
-            return ResponseDTO.data(airTripCrud.create(data, file),
-                    HttpStatus.OK);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                            .body((airTripCrud.create(data, file)));
 
         }
         catch (Exception exception){
             log.error(exception.getMessage());
-            return ResponseDTO.error(exception.getMessage(),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(exception.getMessage());
         }
     }
     @PutMapping("/update")
-    public ResponseDTO<?> updateCountry(@RequestPart("data") AirTripData data,
+    public ResponseEntity<?> updateCountry(@RequestPart("data") AirTripData data,
                                                 @RequestPart("file") MultipartFile file,
                                                 @RequestPart Long id){
         try {
-            return ResponseDTO.data(airTripCrud.update(data, file, id),
-                    HttpStatus.OK);
-
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(airTripCrud.update(data, file, id));
         }
         catch (Exception exception){
             log.error(exception.getMessage());
-            return ResponseDTO.error(exception.getMessage(),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(exception.getMessage());
         }
 
     }
     @GetMapping("/getAll")
-    public ResponseDTO<?> findAll(){
+    public ResponseEntity<?> findAll(){
         try {
-            return ResponseDTO.data(airTripCrud.findAll(), HttpStatus.OK);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(airTripCrud.findAll());
         }
         catch (Exception exception){
             log.error(exception.getMessage());
-            return ResponseDTO.error(exception.getMessage(),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(exception.getMessage());
         }
     }
     @GetMapping("/getAirTripById")
-    public ResponseDTO<?> getById(@RequestParam Long id){
+    public ResponseEntity<?> getById(@RequestParam Long id){
         try {
-            return ResponseDTO.data(airTripCrud.getById(id), HttpStatus.OK);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(airTripCrud.getById(id));
         }
         catch (Exception exception) {
             log.error(exception.getMessage());
-            return ResponseDTO.error(exception.getMessage(),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(exception.getMessage());
         }
     }
     @GetMapping("/pageFind")
-    public ResponseDTO<?> getAll(@RequestParam Long page,
+    public ResponseEntity<?> getAll(@RequestParam Long page,
                                   @RequestParam Long size){
         try {
-            return ResponseDTO.data(airTripCrud.findAll(page, size),
-                    HttpStatus.OK);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(airTripCrud.findAll(page, size));
         }
         catch (Exception exception) {
             log.error(exception.getMessage());
-            return ResponseDTO.error(exception.getMessage(),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(exception.getMessage());
         }
     }
     @DeleteMapping("/delete")
-    public ResponseDTO<?> delete(@RequestParam Long id){
+    public ResponseEntity<?> delete(@RequestParam Long id){
         try {
             airTripCrud.delete(id);
-            return ResponseDTO.success();
+            return ResponseEntity
+                    .ok(HttpStatus.OK);
 
         }
         catch (Exception exception){
             log.error(exception.getMessage());
-            return ResponseDTO.error(exception.getMessage(),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(exception.getMessage());
         }
     }
 }
