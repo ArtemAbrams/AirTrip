@@ -1,0 +1,436 @@
+{
+	"info": {
+		"_postman_id": "c10d206f-0748-4caa-ad93-0c54a43f56af",
+		"name": "AviaTrip",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "29638461"
+	},
+	"item": [
+		{
+			"name": "Add country",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"removeRefererHeaderOnRedirect": false,
+				"followAuthorizationHeader": false
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6W3siaWQiOjEsInJvbGUiOiJVc2VyIiwiYXV0aG9yaXR5IjoiVXNlciJ9XSwic3ViIjoiYmFyaXNoQXJ0QGdtYWlsLmNvbSIsImlhdCI6MTY5NDc5MTEyNiwiZXhwIjoxNjk0ODc3NTI2fQ.PBRZvgzKTxFCyC1Vzlm5vLcVabT84tAhTt1TFExnX9fLSm_97TQmL8CCqg7ZwWsyG6rMps2d3yYDuoFc20_UYg"
+					}
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "data",
+							"value": "{\"name\" : \"Germany\"}",
+							"type": "text"
+						},
+						{
+							"key": "file",
+							"type": "file",
+							"src": "avia-teckets-1920-958.jpg"
+						}
+					]
+				},
+				"url": "http://localhost:8080/country/create "
+			},
+			"response": []
+		},
+		{
+			"name": "registration",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response body contains the message 'You have registered'\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"You have registered\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response body is not empty\", function () {\r",
+							"    pm.expect(pm.response.text()).to.not.be.empty;\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response contains a token or unique identifier\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.token).to.exist.and.to.be.a('string');\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\" : \"Artem\",\r\n    \"lastname\" : \"Barysh\",\r\n    \"email\": \"barish@gmail.com\",\r\n    \"password\": \"qwerty\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/authorize/registration"
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\" : \"barish@gmail.com\",\r\n    \"password\": \"qwerty\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/authorize/login"
+			},
+			"response": []
+		},
+		{
+			"name": "Update country",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": "http://localhost:8080/country/update"
+			},
+			"response": []
+		},
+		{
+			"name": "Get all country",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Country",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response body is not empty\", function () {\r",
+							"    pm.expect(pm.response.text()).to.be.not.empty;\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6W3siaWQiOjEsInJvbGUiOiJVc2VyIiwiYXV0aG9yaXR5IjoiVXNlciJ9XSwic3ViIjoiYmFyaXNoQGdtYWlsLmNvbSIsImlhdCI6MTY5NDk2MDI0OCwiZXhwIjoxNjk1MDQ2NjQ4fQ.-0h3ymQX_yF1P0m6HCU7Jo49EarHWPEewtYAXdAaJIsZR5wr0s_ZXezouHJebH5QvJx7afoU4Asz61eSrDQjvQ"
+					}
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/country/delete?id=3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"country",
+						"delete"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get country by id",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Pagination countries",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Add plane",
+			"request": {
+				"method": "POST",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "update plane",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": "http://localhost:8080/plane/update"
+			},
+			"response": []
+		},
+		{
+			"name": "Get all planes",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Country",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response body is empty\", function () {\r",
+							"    pm.expect(pm.response.text()).to.be.not.empty;\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Verify that the 'id' query parameter is present in the request URL\", function () {\r",
+							"    pm.expect(pm.request.url.query.toObject()).to.have.property(\"id\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Verify that query has id parametr\", function () {\r",
+							"    const queryParams = pm.request.url.query.all();\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6W3siaWQiOjEsInJvbGUiOiJVc2VyIiwiYXV0aG9yaXR5IjoiVXNlciJ9XSwic3ViIjoiYmFyaXNoQGdtYWlsLmNvbSIsImlhdCI6MTY5NDk2MDI0OCwiZXhwIjoxNjk1MDQ2NjQ4fQ.-0h3ymQX_yF1P0m6HCU7Jo49EarHWPEewtYAXdAaJIsZR5wr0s_ZXezouHJebH5QvJx7afoU4Asz61eSrDQjvQ"
+					}
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/plane/delete?id=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"plane",
+						"delete"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get country by id",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Pagination planes",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Create New AviaTrip",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "http://localhost:8080/airTrip/create"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Trip",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6W3siaWQiOjEsInJvbGUiOiJVc2VyIiwiYXV0aG9yaXR5IjoiVXNlciJ9XSwic3ViIjoiYmFyaXNoQGdtYWlsLmNvbSIsImlhdCI6MTY5NDk2MDI0OCwiZXhwIjoxNjk1MDQ2NjQ4fQ.-0h3ymQX_yF1P0m6HCU7Jo49EarHWPEewtYAXdAaJIsZR5wr0s_ZXezouHJebH5QvJx7afoU4Asz61eSrDQjvQ"
+					}
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "data",
+							"value": "{\"price\" : \"140\",\n\"enabled\" : \"true\",\n\"fromCountryId\" : \"1\",\n\"toCountryId\" : \"8\",\n\"departureDate\" : \"2023-10-17 19:29:18\",\n\"planeId\" : \"3\"}",
+							"contentType": "application/json",
+							"type": "text"
+						},
+						{
+							"key": "file",
+							"type": "file",
+							"src": []
+						},
+						{
+							"key": "id",
+							"value": "1",
+							"contentType": "application/json",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:8080/airTrip/update"
+			},
+			"response": []
+		},
+		{
+			"name": "get all trips",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Get trip by id",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Pagination trips",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/airTrip/delete?id=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"airTrip",
+						"delete"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
