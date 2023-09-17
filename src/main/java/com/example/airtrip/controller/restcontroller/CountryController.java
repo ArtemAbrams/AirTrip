@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 public class CountryController {
     private final CountryCrud countryCrud;
-    private final CountryRepository countryRepository;
     @PostMapping("/create")
     public ResponseEntity<?> createCountry(@RequestPart("data") CountryData countryData,
                                      @RequestPart("file") MultipartFile file){

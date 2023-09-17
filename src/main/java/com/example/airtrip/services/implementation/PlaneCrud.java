@@ -5,6 +5,7 @@ import com.example.airtrip.domain.dto.dtoforrestapi.PlaneDTO;
 import com.example.airtrip.domain.mapper.restapimapper.AirTripMapper;
 import com.example.airtrip.domain.mapper.restapimapper.PlaneMapper;
 import com.example.airtrip.exception.AirTripNotFoundException;
+import com.example.airtrip.exception.PlaneHasTripException;
 import com.example.airtrip.exception.PlaneNotFoundException;
 import com.example.airtrip.repository.PlaneRepository;
 import com.example.airtrip.services.CrudOperations;
@@ -61,9 +62,12 @@ public class PlaneCrud implements CrudOperations<PlaneData, PlaneDTO> {
 
     @Override
     public void delete(Long id) {
-        var entity = planeRepository.findById(id)
+        var plane = planeRepository.findById(id)
                 .orElseThrow(()-> new PlaneNotFoundException("Plane with " + id + " was not found"));
-        planeRepository.delete(entity);
+        if(plane.getAirTripList().isEmpty())
+           planeRepository.delete(plane);
+        else
+            throw new PlaneHasTripException("You cannot do this action because this plane has trips");
     }
 
     @Override

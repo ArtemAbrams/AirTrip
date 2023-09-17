@@ -92,8 +92,7 @@ public class AirTripCrud implements CrudOperations<AirTripData,AirTripDTO> {
     public void delete(Long id) {
         var airTrip = airTripRepository.findById(id)
                 .orElseThrow(() -> new AirTripNotFoundException("Air trip with "+ id + " was not found"));
-        if(!airTrip.isEnabled())
-            airTripRepository.delete(airTrip);
+        airTripRepository.delete(airTrip);
     }
 
     @Override

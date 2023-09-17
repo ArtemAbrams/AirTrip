@@ -21,7 +21,7 @@ public class AirTripController {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                            .body((airTripCrud.create(data, file)));
+                            .body(airTripCrud.create(data, file));
 
         }
         catch (Exception exception){
