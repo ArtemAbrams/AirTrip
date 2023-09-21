@@ -65,6 +65,10 @@
           <input type="hidden" name="id" th:value="${order.id}" />
           <button class="btn btn-success btn-sm" type="submit">Add product</button>
         </form>
+        <form th:action="@{/order/viewOnMap}" th:method="get">
+          <input type="hidden" name="countryName" th:value="${order.countryName}" />
+          <button class="btn btn-success btn-sm" type="submit">Show country in map</button>
+        </form>
       </td>
     </tr>
     </tbody>

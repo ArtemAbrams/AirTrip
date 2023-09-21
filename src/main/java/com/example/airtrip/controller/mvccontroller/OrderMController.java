@@ -6,10 +6,13 @@ import com.example.airtrip.domain.entity.entityformvc.OrderM;
 import com.example.airtrip.domain.mapper.mvcmapper.ConflictCountryMapper;
 import com.example.airtrip.domain.mapper.mvcmapper.OrderMMapper;
 import com.example.airtrip.domain.mapper.mvcmapper.ProductMapper;
+import com.example.airtrip.mapintegration.extract.ExtractCoordinate;
+import com.example.airtrip.mapintegration.service.implementation.MapService;
 import com.example.airtrip.repository.ConflictCountryRepository;
 import com.example.airtrip.repository.OrderRepository;
 import com.example.airtrip.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
@@ -30,6 +33,9 @@ public class OrderMController {
     private final OrderRepository orderRepository;
     private final ConflictCountryRepository countryRepository;
     private final ProductRepository productRepository;
+    private final MapService mapService;
+    @Value("${map.api.key}")
+    private String key;
     @GetMapping("/getAll")
     public String getAll(ModelMap modelMap){
         var orders = orderRepository.findAll()
@@ -38,6 +44,19 @@ public class OrderMController {
                 .toList();
         modelMap.addAttribute("listOrders", orders);
         return "order_index";
+    }
+    @GetMapping("/viewOnMap")
+    public String viewOnMap(@RequestParam("countryName") String countryName, ModelMap modelMap){
+        var body = mapService.getCoordinate(countryName);
+        var location = ExtractCoordinate.getLocation(body);
+        if(location==null){
+            return "wrong_map_page";
+        }
+        modelMap.addAttribute("lat", location.getLat());
+        modelMap.addAttribute("countryName", countryName);
+        modelMap.addAttribute("lng", location.getLng());
+        modelMap.addAttribute("apikey", key);
+        return "show_in_map";
     }
     @PostMapping("/deleteOrder")
     public String deleteProduct(@RequestParam("id") Long id) {
