@@ -2,9 +2,7 @@ package com.example.airtrip.services.implementation;
 
 import com.example.airtrip.domain.data.dataforrestapi.PlaneData;
 import com.example.airtrip.domain.dto.dtoforrestapi.PlaneDTO;
-import com.example.airtrip.domain.mapper.restapimapper.AirTripMapper;
 import com.example.airtrip.domain.mapper.restapimapper.PlaneMapper;
-import com.example.airtrip.exception.AirTripNotFoundException;
 import com.example.airtrip.exception.PlaneHasTripException;
 import com.example.airtrip.exception.PlaneNotFoundException;
 import com.example.airtrip.repository.PlaneRepository;

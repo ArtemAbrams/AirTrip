@@ -2,9 +2,11 @@ package com.example.airtrip.domain.entity.entityforrestspi;
 
 import com.example.airtrip.domain.entity.BasicEntity;
 import com.example.airtrip.domain.entity.entityforrestspi.AirTrip;
+import com.sun.source.doctree.SerialDataTree;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
@@ -14,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Country extends BasicEntity {
+public class Country extends BasicEntity implements Serializable {
     private String name;
     @Lob
     @Column(name = "flag_country", length = 20971520)
