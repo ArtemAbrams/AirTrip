@@ -11,6 +11,8 @@ import com.example.airtrip.repository.CountryRepository;
 import com.example.airtrip.repository.PlaneRepository;
 import com.example.airtrip.services.CrudOperations;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -47,6 +49,7 @@ public class AirTripCrud implements CrudOperations<AirTripData,AirTripDTO> {
 
     @Override
     @Transactional
+    @CacheEvict(value = "airTrips", key = "#id")
     public AirTripDTO update(AirTripData data, MultipartFile file, Long id) throws IOException {
        var airTrip = airTripRepository.findById(id)
                .orElseThrow(() -> new AirTripNotFoundException("Air trip with "+ id + " was not found"));
@@ -69,6 +72,7 @@ public class AirTripCrud implements CrudOperations<AirTripData,AirTripDTO> {
     }
 
     @Override
+    @Cacheable(value = "airTrips", key = "'all'")
     public List<AirTripDTO> findAll() {
         return airTripRepository.findAll()
                 .stream()
@@ -89,6 +93,7 @@ public class AirTripCrud implements CrudOperations<AirTripData,AirTripDTO> {
     }
 
     @Override
+    @CacheEvict(value = "airTrips", key = "#id")
     public void delete(Long id) {
         var airTrip = airTripRepository.findById(id)
                 .orElseThrow(() -> new AirTripNotFoundException("Air trip with "+ id + " was not found"));
@@ -96,6 +101,7 @@ public class AirTripCrud implements CrudOperations<AirTripData,AirTripDTO> {
     }
 
     @Override
+    @Cacheable(value = "airTrips", key = "#page + '_' + #size")
     public Page<AirTripDTO> findAll(Long page, Long size) {
         return airTripRepository.findAll(PageRequest.of(Math.toIntExact(page), Math.toIntExact(size)))
                 .map(e -> {
@@ -108,6 +114,7 @@ public class AirTripCrud implements CrudOperations<AirTripData,AirTripDTO> {
     }
 
     @Override
+    @Cacheable(value = "airTrips", key = "#Id")
     public AirTripDTO getById(Long Id) throws IOException {
         return AirTripMapper.entityToDto(
                 airTripRepository.findById(Id)

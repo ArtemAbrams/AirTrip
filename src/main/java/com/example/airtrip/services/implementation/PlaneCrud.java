@@ -8,6 +8,9 @@ import com.example.airtrip.exception.PlaneNotFoundException;
 import com.example.airtrip.repository.PlaneRepository;
 import com.example.airtrip.services.CrudOperations;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -31,6 +34,7 @@ public class PlaneCrud implements CrudOperations<PlaneData, PlaneDTO> {
 
     @Override
     @Transactional
+    @CachePut(value = "planes", key = "#id")
     public PlaneDTO update(PlaneData data, MultipartFile file, Long id) throws IOException {
       var plane = planeRepository.findById(id)
               .orElseThrow(() -> new PlaneNotFoundException("Plane with " + id + " was not found"));
@@ -43,6 +47,7 @@ public class PlaneCrud implements CrudOperations<PlaneData, PlaneDTO> {
     }
 
     @Override
+    @Cacheable("planes")
     public List<PlaneDTO> findAll() {
         return planeRepository.findAll()
                 .stream()
@@ -59,6 +64,7 @@ public class PlaneCrud implements CrudOperations<PlaneData, PlaneDTO> {
     }
 
     @Override
+    @CacheEvict(value = "planes", key = "#id")
     public void delete(Long id) {
         var plane = planeRepository.findById(id)
                 .orElseThrow(()-> new PlaneNotFoundException("Plane with " + id + " was not found"));
@@ -69,6 +75,7 @@ public class PlaneCrud implements CrudOperations<PlaneData, PlaneDTO> {
     }
 
     @Override
+    @Cacheable(value = "planes", key = "#page + '_' + #size")
     public Page<PlaneDTO> findAll(Long page, Long size) {
          return planeRepository.findAll(PageRequest.of(Math.toIntExact(page), Math.toIntExact(size)))
                 .map(e -> {
@@ -81,6 +88,7 @@ public class PlaneCrud implements CrudOperations<PlaneData, PlaneDTO> {
     }
 
     @Override
+    @Cacheable(value = "planes", key = "#Id")
     public PlaneDTO getById(Long Id) throws IOException {
         return PlaneMapper.entityToDto(
                planeRepository.findById(Id)

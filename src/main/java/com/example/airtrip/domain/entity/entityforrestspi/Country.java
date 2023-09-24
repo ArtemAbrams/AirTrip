@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Country extends BasicEntity implements Serializable {
+public class Country extends BasicEntity {
     private String name;
     @Lob
     @Column(name = "flag_country", length = 20971520)

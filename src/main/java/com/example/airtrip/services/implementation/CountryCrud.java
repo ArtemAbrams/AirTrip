@@ -10,6 +10,8 @@ import com.example.airtrip.exception.PlaneNotFoundException;
 import com.example.airtrip.repository.CountryRepository;
 import com.example.airtrip.services.CrudOperations;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,7 @@ public class CountryCrud implements CrudOperations<CountryData, CountryDTO> {
 
     @Override
     @Transactional
+    @CacheEvict(value = "countries", key = "#id")
     public CountryDTO update(CountryData data, MultipartFile file, Long id) throws IOException {
       var entity = countryRepository.findById(id)
               .orElseThrow(()-> new CountryNotFoundException("Country with " + id + " was not found"));
@@ -43,6 +46,7 @@ public class CountryCrud implements CrudOperations<CountryData, CountryDTO> {
     }
 
     @Override
+    @Cacheable(value = "countries", key = "'all'")
     public List<CountryDTO> findAll() {
             return countryRepository.findAll()
                     .stream()
@@ -59,6 +63,7 @@ public class CountryCrud implements CrudOperations<CountryData, CountryDTO> {
     }
 
     @Override
+    @CacheEvict(value = "countries", key = "#id")
     public void delete(Long id) {
             var entity = countryRepository.findById(id)
                     .orElseThrow(()-> new CountryNotFoundException("Country with " + id + " was not found" ));
@@ -69,6 +74,7 @@ public class CountryCrud implements CrudOperations<CountryData, CountryDTO> {
     }
 
     @Override
+    @Cacheable(value = "countries", key = "#page + '_' + #size")
     public Page<CountryDTO> findAll(Long page, Long size) {
         return countryRepository.findAll(PageRequest.of(Math.toIntExact(page), Math.toIntExact(size)))
                 .map(e -> {
@@ -81,6 +87,7 @@ public class CountryCrud implements CrudOperations<CountryData, CountryDTO> {
     }
 
     @Override
+    @Cacheable(value = "countries", key = "#Id")
     public CountryDTO getById(Long Id) throws IOException {
         return CountryMapper.entityToDto(
                countryRepository.findById(Id)

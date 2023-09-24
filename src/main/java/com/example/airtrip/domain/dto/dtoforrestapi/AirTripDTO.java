@@ -2,6 +2,7 @@ package com.example.airtrip.domain.dto.dtoforrestapi;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Builder
@@ -9,7 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
-public class AirTripDTO {
+public class AirTripDTO implements Serializable {
     private double price;
     private boolean enabled;
     private CountryDTO fromCountry;
