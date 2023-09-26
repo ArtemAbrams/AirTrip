@@ -38,7 +38,8 @@ public class SecurityFilterConfiguration {
                                         "/oauth2/**",
                                         "/conflict/country/**",
                                         "/product/**",
-                                        "/order/**")
+                                        "/order/**",
+                                        "/saleforce/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()
