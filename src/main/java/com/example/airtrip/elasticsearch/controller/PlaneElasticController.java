@@ -31,7 +31,7 @@ public class PlaneElasticController {
             var id = UUID.randomUUID().toString();
             var plane = PlaneElastic.builder()
                     .name(planeData.getName())
-                    .colour(planeData.getColour())
+                   // .colour(planeData.getColour())
                     .id(id)
                     .build();
             if(file!=null && file.getBytes().length!=0){

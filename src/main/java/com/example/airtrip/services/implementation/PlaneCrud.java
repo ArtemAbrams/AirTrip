@@ -25,7 +25,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PlaneCrud implements CrudOperations<PlaneData, PlaneDTO> {
     private final PlaneRepository planeRepository;
-    private final AzurePhotoBlobStorageImpl azurePhotoBlobStorage;
 
     @Override
     public PlaneDTO create(PlaneData data, MultipartFile file) throws IOException {

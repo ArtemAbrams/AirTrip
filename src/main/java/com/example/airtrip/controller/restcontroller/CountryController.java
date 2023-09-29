@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,13 +19,22 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 public class CountryController {
     private final CountryCrud countryCrud;
+    private final KafkaTemplate<String, Object> countryDataKafkaTemplate;
     @PostMapping("/create")
     public ResponseEntity<?> createCountry(@RequestPart("data") CountryData countryData,
                                      @RequestPart("file") MultipartFile file){
         try {
+           /* var countryDTO = countryDataKafkaTemplate.send("country",
+                    "createCountry",
+                    countryData);*/
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(countryCrud.create(countryData, file));
+                    .body(countryDataKafkaTemplate.send("country",
+                            "createCountry",
+                            countryData)
+                            .get()
+                            .getProducerRecord()
+                            .value());
 
         }
         catch (Exception exception){

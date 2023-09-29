@@ -41,7 +41,8 @@ public class SecurityFilterConfiguration {
                                         "/order/**",
                                         "/saleforce/**",
                                         "/elastic-plane/**",
-                                        "/elastic-country/**")
+                                        "/elastic-country/**",
+                                        "/country/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()
