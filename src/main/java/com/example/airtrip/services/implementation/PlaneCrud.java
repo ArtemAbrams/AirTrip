@@ -1,5 +1,6 @@
 package com.example.airtrip.services.implementation;
 
+import com.example.airtrip.blobstorage.service.implementation.AzurePhotoBlobStorageImpl;
 import com.example.airtrip.domain.data.dataforrestapi.PlaneData;
 import com.example.airtrip.domain.dto.dtoforrestapi.PlaneDTO;
 import com.example.airtrip.domain.mapper.restapimapper.PlaneMapper;
@@ -24,6 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PlaneCrud implements CrudOperations<PlaneData, PlaneDTO> {
     private final PlaneRepository planeRepository;
+    private final AzurePhotoBlobStorageImpl azurePhotoBlobStorage;
 
     @Override
     public PlaneDTO create(PlaneData data, MultipartFile file) throws IOException {

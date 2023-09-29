@@ -20,7 +20,7 @@ public class Plane extends BasicEntity {
     private String name;
     @Enumerated(value = EnumType.STRING)
     private Colour colour;
-    @Lob
+
     @Column(name = "image_plane", length = 20971520)
     private byte[] imageFile;
 

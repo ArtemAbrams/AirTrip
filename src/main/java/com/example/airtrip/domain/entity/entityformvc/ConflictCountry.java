@@ -17,7 +17,7 @@ public class ConflictCountry extends BasicEntity {
     private String name;
     @Lob
     @Column(length = 2147483647)
-    private byte[] flag;
+    private String flag;
     @Enumerated(value = EnumType.STRING)
     private TypeOfConflict typeOfConflict;
     @OneToMany(mappedBy = "conflictCountry", cascade = {CascadeType.ALL})

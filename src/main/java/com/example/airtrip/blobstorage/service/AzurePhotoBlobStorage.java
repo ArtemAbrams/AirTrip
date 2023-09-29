@@ -6,4 +6,5 @@ public interface AzurePhotoBlobStorage {
     boolean delete(String path);
     String upload(MultipartFile multipartFile);
     byte[] download(String path);
+    String update(MultipartFile multipartFile, String path);
 }

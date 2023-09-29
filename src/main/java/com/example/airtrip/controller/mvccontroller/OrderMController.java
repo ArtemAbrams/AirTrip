@@ -34,6 +34,7 @@ public class OrderMController {
     private final ConflictCountryRepository countryRepository;
     private final ProductRepository productRepository;
     private final MapService mapService;
+    private final ConflictCountryMapper conflictCountryMapper;
     @Value("${map.api.key}")
     private String key;
     @GetMapping("/getAll")
@@ -69,7 +70,7 @@ public class OrderMController {
     public String create(ModelMap modelMap){
         var countries = countryRepository.findAll()
                         .stream()
-                        .map(ConflictCountryMapper::entityToDTO)
+                        .map(conflictCountryMapper::entityToDTO)
                         .toList();
         modelMap.addAttribute("countries", countries);
         return "create_order";
@@ -97,7 +98,7 @@ public class OrderMController {
         var orderDTO = OrderMMapper.entityToDTO(order);
         var countries = countryRepository.findAll()
                 .stream()
-                .map(ConflictCountryMapper::entityToDTO)
+                .map(conflictCountryMapper::entityToDTO)
                 .toList();
         modelMap.addAttribute("countries", countries);
         modelMap.addAttribute("dto", orderDTO);

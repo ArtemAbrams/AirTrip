@@ -1,6 +1,7 @@
 package com.example.airtrip.controller.mvccontroller;
 
 
+import com.example.airtrip.blobstorage.service.implementation.AzurePhotoBlobStorageImpl;
 import com.example.airtrip.domain.entity.entityformvc.ConflictCountry;
 import com.example.airtrip.domain.enums.TypeOfConflict;
 import com.example.airtrip.domain.mapper.mvcmapper.ConflictCountryMapper;
@@ -18,12 +19,14 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @RequestMapping("/conflict/country")
 public class ConflictCountryController {
+    private final ConflictCountryMapper conflictCountryMapper;
     private final ConflictCountryRepository countryRepository;
+    private final AzurePhotoBlobStorageImpl azurePhotoBlobStorage;
     @GetMapping("/getAll")
     public String getAll(ModelMap map){
         var countries = countryRepository.findAll()
                 .stream()
-                .map(ConflictCountryMapper::entityToDTO)
+                .map(conflictCountryMapper::entityToDTO)
                 .toList();
         map.addAttribute("listOfCountry", countries);
         return "index_country";
@@ -37,10 +40,11 @@ public class ConflictCountryController {
     public String submitCreate(@RequestParam("name") String name,
                                @RequestParam("typeOfConflict") TypeOfConflict typeOfConflict,
                                @RequestParam("flag") MultipartFile file) throws IOException {
+        var path = azurePhotoBlobStorage.upload(file);
         var country = ConflictCountry.builder()
                 .name(name)
                 .typeOfConflict(typeOfConflict)
-                .flag(file.getBytes())
+                .flag(path)
                 .build();
         countryRepository.saveAndFlush(country);
         return "redirect:/conflict/country/getAll";
@@ -49,6 +53,7 @@ public class ConflictCountryController {
     public String deleteCountry(@RequestParam("id") Long id) {
         var country = countryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Country with id " + id + " was not found"));
+        azurePhotoBlobStorage.delete(country.getFlag());
         countryRepository.delete(country);
         return "redirect:/conflict/country/getAll";
     }
@@ -57,7 +62,7 @@ public class ConflictCountryController {
                               ModelMap modelMap) {
         var country = countryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Country with id " + id + " was not found"));
-        var countryDTO = ConflictCountryMapper.entityToDTO(country);
+        var countryDTO = conflictCountryMapper.entityToDTO(country);
         modelMap.addAttribute("dto", countryDTO);
         modelMap.addAttribute("conflicts", TypeOfConflict.values());
         return "edit_country";
@@ -72,9 +77,8 @@ public class ConflictCountryController {
                 .orElseThrow(() -> new RuntimeException("Country with id " + id + " was not found"));
         country.setName(name);
         country.setTypeOfConflict(typeOfConflict);
-        if(multipartFile.getBytes().length!=0){
-            country.setFlag(multipartFile.getBytes());
-        }
+        var string = azurePhotoBlobStorage.update(multipartFile, country.getFlag());
+        country.setFlag(string);
         return "redirect:/conflict/country/getAll";
     }
 }
