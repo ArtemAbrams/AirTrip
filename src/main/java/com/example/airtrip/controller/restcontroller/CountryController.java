@@ -8,8 +8,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.annotation.Nullable;
 
 
 @RestController
@@ -19,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class CountryController {
     private final CountryCrud countryCrud;
     @PostMapping("/create")
+    @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<?> createCountry(@RequestPart("data") CountryData countryData,
                                      @RequestPart("file") MultipartFile file){
         try {
@@ -27,7 +31,6 @@ public class CountryController {
                     .body(countryCrud
                             .create(countryData,
                                     file));
-
         }
         catch (Exception exception){
             log.error(exception.getMessage());
@@ -37,14 +40,14 @@ public class CountryController {
         }
     }
     @PutMapping(value = "/update", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<?> updateCountry(@RequestPart("data") CountryData countryData,
-                                                @RequestPart("file") MultipartFile file,
+                                           @RequestPart("file") MultipartFile file,
                                                 @RequestPart("id") Long id){
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(countryCrud.update(countryData, file, id));
-
         }
         catch (Exception exception){
             log.error(exception.getMessage());
@@ -70,6 +73,7 @@ public class CountryController {
 
     }
     @DeleteMapping("/delete")
+    @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<?> delete(@RequestParam Long id){
         try {
             countryCrud.delete(id);
@@ -98,6 +102,7 @@ public class CountryController {
         }
     }
     @GetMapping("/pageFind")
+    @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<?> getAll(@RequestParam Long page,
                                  @RequestParam Long size){
         try {

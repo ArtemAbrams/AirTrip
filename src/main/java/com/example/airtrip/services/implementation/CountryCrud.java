@@ -47,7 +47,7 @@ public class CountryCrud implements CrudOperations<CountryData, CountryDTO> {
     }
 
     @Override
-    @Cacheable(value = "countries", key = "'all'")
+   //@Cacheable(value = "countries", key = "'all'")
     public List<CountryDTO> findAll() {
         return countryRepository.findAll()
                 .stream()

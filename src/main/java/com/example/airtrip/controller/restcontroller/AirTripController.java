@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class AirTripController {
     private final AirTripCrud airTripCrud;
     @PostMapping("/create")
+    @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<?> createCountry(@RequestPart("data") AirTripData data,
                                              @RequestPart("file") MultipartFile file){
         try {
@@ -32,6 +34,7 @@ public class AirTripController {
         }
     }
     @PutMapping("/update")
+    @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<?> updateCountry(@RequestPart("data") AirTripData data,
                                                 @RequestPart("file") MultipartFile file,
                                                 @RequestPart Long id){
@@ -92,6 +95,7 @@ public class AirTripController {
         }
     }
     @DeleteMapping("/delete")
+    @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<?> delete(@RequestParam Long id){
         try {
             airTripCrud.delete(id);

@@ -2,10 +2,7 @@ package com.example.airtrip.domain.entity.entityforrestspi;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -14,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

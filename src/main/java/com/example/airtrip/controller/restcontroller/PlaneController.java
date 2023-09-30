@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +22,7 @@ import java.io.IOException;
 public class PlaneController {
     private final PlaneCrud planeCrud;
     @PostMapping("/create")
+    @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<?> createPlane(@RequestPart("data") PlaneData planeData,
                                                 @RequestPart("file") MultipartFile file){
         try {
@@ -36,6 +38,7 @@ public class PlaneController {
         }
     }
     @PutMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<?> createPlane(@RequestPart("data") PlaneData planeData,
                                               @RequestPart("file") MultipartFile file,
                                               @RequestPart Long id) throws IOException {
@@ -66,6 +69,7 @@ public class PlaneController {
         }
     }
     @DeleteMapping("/delete")
+    @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<?> delete(@RequestParam Long id){
         try {
             planeCrud.delete(id);
