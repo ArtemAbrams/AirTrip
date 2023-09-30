@@ -17,7 +17,7 @@ public class CountryMapper {
     }
     public CountryDTO entityToDto(Country country) throws IOException {
         return CountryDTO.builder()
-                .id(country.getId())
+                .id(country.getId().intValue())
                 .name(country.getName())
                 .file(country.getImageFile())
                 .build();

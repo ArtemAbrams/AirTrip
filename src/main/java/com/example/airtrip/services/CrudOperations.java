@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public interface CrudOperations <T, R>{
     R create(T data, MultipartFile file) throws IOException;
@@ -12,5 +13,5 @@ public interface CrudOperations <T, R>{
     List<R> findAll();
     void delete(Long id);
     Page<R> findAll(Long page, Long size);
-    R getById(Long Id) throws IOException;
+    R getById(Long Id) throws IOException, ExecutionException, InterruptedException;
 }

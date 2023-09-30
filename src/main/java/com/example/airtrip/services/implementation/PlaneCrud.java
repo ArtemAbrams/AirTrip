@@ -14,6 +14,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PlaneCrud implements CrudOperations<PlaneData, PlaneDTO> {
     private final PlaneRepository planeRepository;
+    private final KafkaTemplate<String, Long> airTripKafkaTemplate;
 
     @Override
     public PlaneDTO create(PlaneData data, MultipartFile file) throws IOException {
@@ -67,12 +69,10 @@ public class PlaneCrud implements CrudOperations<PlaneData, PlaneDTO> {
     @Override
     @CacheEvict(value = "planes", key = "#id")
     public void delete(Long id) {
-        var plane = planeRepository.findById(id)
-                .orElseThrow(()-> new PlaneNotFoundException("Plane with " + id + " was not found"));
-        if(plane.getAirTripList().isEmpty())
-           planeRepository.delete(plane);
-        else
-            throw new PlaneHasTripException("You cannot do this action because this plane has trips");
+        airTripKafkaTemplate.send(
+                "deletePlane",
+                id
+        );
     }
 
     @Override

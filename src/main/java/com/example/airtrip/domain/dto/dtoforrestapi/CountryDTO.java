@@ -12,7 +12,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @ToString
 public class CountryDTO implements Serializable {
-    private Long id;
+    private int id;
     private String name;
     private byte[] file;
 }

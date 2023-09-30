@@ -15,6 +15,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,6 +31,7 @@ public class AirTripCrud implements CrudOperations<AirTripData,AirTripDTO> {
     private final PlaneRepository planeRepository;
     private final AirTripRepository airTripRepository;
     private final TelegramBot telegramBot;
+    private final KafkaTemplate<String, Long> KafkaTemplate;
     @Override
     public AirTripDTO create(AirTripData data, MultipartFile file) throws IOException {
         var plane = planeRepository.findById(data.getPlaneId())
@@ -95,9 +97,10 @@ public class AirTripCrud implements CrudOperations<AirTripData,AirTripDTO> {
     @Override
     @CacheEvict(value = "airTrips", key = "#id")
     public void delete(Long id) {
-        var airTrip = airTripRepository.findById(id)
-                .orElseThrow(() -> new AirTripNotFoundException("Air trip with "+ id + " was not found"));
-        airTripRepository.delete(airTrip);
+        KafkaTemplate.send(
+                "deleteAirTrip",
+                id
+        );
     }
 
     @Override

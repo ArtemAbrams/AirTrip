@@ -1,6 +1,7 @@
 package com.example.airtrip.kafka.configuration;
 
-import com.example.airtrip.domain.data.dataforrestapi.PlaneData;
+
+
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,18 +21,18 @@ public class ConsumerConfiguration {
     @Value("${spring.kafka.bootstrap-servers}")
     private String serverBootstrap;
     @Bean
-    public ConsumerFactory<String, Object> createConsumerFactory(){
+    public ConsumerFactory<String, Long> createConsumerFactory(){
         var properties = new HashMap<String, Object>();
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, serverBootstrap);
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,  JsonDeserializer.class);
+        properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, "json");
         return new DefaultKafkaConsumerFactory<>(properties);
     }
     @Bean
     public KafkaListenerContainerFactory<
-            ConcurrentMessageListenerContainer<String, Object>> factory(){
-        ConcurrentKafkaListenerContainerFactory<String, Object> containerFactory
+                ConcurrentMessageListenerContainer<String, Long>> factory(){
+        ConcurrentKafkaListenerContainerFactory<String, Long> containerFactory
                 = new ConcurrentKafkaListenerContainerFactory<>();
         containerFactory.setConsumerFactory(createConsumerFactory());
         return containerFactory;

@@ -1,7 +1,6 @@
 package com.example.airtrip.controller.restcontroller;
 
 import com.example.airtrip.domain.data.dataforrestapi.CountryData;
-import com.example.airtrip.repository.CountryRepository;
 import com.example.airtrip.services.implementation.CountryCrud;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,22 +18,15 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 public class CountryController {
     private final CountryCrud countryCrud;
-    private final KafkaTemplate<String, Object> countryDataKafkaTemplate;
     @PostMapping("/create")
     public ResponseEntity<?> createCountry(@RequestPart("data") CountryData countryData,
                                      @RequestPart("file") MultipartFile file){
         try {
-           /* var countryDTO = countryDataKafkaTemplate.send("country",
-                    "createCountry",
-                    countryData);*/
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(countryDataKafkaTemplate.send("country",
-                            "createCountry",
-                            countryData)
-                            .get()
-                            .getProducerRecord()
-                            .value());
+                    .body(countryCrud
+                            .create(countryData,
+                                    file));
 
         }
         catch (Exception exception){
@@ -95,7 +87,8 @@ public class CountryController {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(countryCrud.getById(id));
+                    .body(countryCrud
+                            .getById(id));
         }
         catch (Exception exception){
             log.error(exception.getMessage());
