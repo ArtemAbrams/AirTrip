@@ -3,6 +3,7 @@ package com.example.airtrip.services.implementation;
 import com.example.airtrip.domain.data.dataforrestapi.LoginData;
 import com.example.airtrip.domain.data.dataforrestapi.RegistrationData;
 import com.example.airtrip.domain.dto.dtoforrestapi.TokenResponse;
+import com.example.airtrip.domain.entity.entityforrestspi.Role;
 import com.example.airtrip.domain.entity.entityforrestspi.User;
 import com.example.airtrip.domain.enums.AuthProvider;
 import com.example.airtrip.repository.RoleRepository;
@@ -13,6 +14,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -48,6 +50,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
+    @Transactional
     public TokenResponse login(LoginData loginData) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
           loginData.getEmail(),
@@ -56,9 +59,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         );
         var user = userRepository.findUserByEmail(loginData.getEmail())
                 .orElseThrow(() -> new RuntimeException("User was not found"));
+        var listRole = user.getRoles()
+                .stream()
+                .map(Role::getRole)
+                .toList();
         return TokenResponse
                 .builder()
                 .token(jwtServiceIml.generateToken(user))
+                .roleDTOList(listRole)
                 .build();
     }
 }
