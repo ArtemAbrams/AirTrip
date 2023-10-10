@@ -7,6 +7,7 @@ import com.example.airtrip.domain.enums.TypeOfConflict;
 import com.example.airtrip.domain.mapper.mvcmapper.ConflictCountryMapper;
 import com.example.airtrip.repository.ConflictCountryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,6 +27,16 @@ public class ConflictCountryController {
     @GetMapping("/getAll")
     public String getAll(ModelMap map){
         var countries = countryRepository.findAll()
+                .stream()
+                .map(conflictCountryMapper::entityToDTO)
+                .toList();
+        map.addAttribute("listOfCountry", countries);
+        return "index_country";
+    }
+    @GetMapping("/getCountryByName")
+    public String getAllByName(String countryName, ModelMap map){
+        var countries = countryRepository
+                .findConflictCountriesByNameLike(countryName + "%")
                 .stream()
                 .map(conflictCountryMapper::entityToDTO)
                 .toList();
